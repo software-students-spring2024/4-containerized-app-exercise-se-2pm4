@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Gallery</title>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+    <div>
+        {% for image in images %}
+            <div>
+                <img src="{{ url_for('static', filename='uploads/' ~ image.image_ref) }}" alt="Uploaded Image" style="width: 200px;">
+                <p>Emotion: {{ image.emotion }}</p>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="/">Go back home</a>
+</body>
+</html>
