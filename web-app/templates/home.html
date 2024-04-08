@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Emotion Recognition</title>
+</head>
+
+<body>
+    <h1>Upload an Image</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" required>
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <div id="uploadStatus"></div>
+
+    <script>
+        function checkStatus(objectId) {
+            fetch(`/status/${objectId}`).then(response => response.json()).then(data => {
+                if (data.processed) {
+                    document.getElementById('uploadStatus').innerText = `Emotion: ${data.emotion}`;
+                } else {
+                    // check in 5 seconds
+                    setTimeout(() => checkStatus(objectId), 5000);
+                }
+            });
+        }
+
+        document.querySelector('form').onsubmit = function (event) {
+            event.preventDefault();
+            let formData = new FormData(this);
+            fetch('/', {
+                method: 'POST',
+                body: formData,
+            }).then(response => response.json()).then(data => {
+                document.getElementById('uploadStatus').innerText = 'Processing...';
+                // start checking the status
+                checkStatus(data.object_id);
+            });
+        };
+    </script>
+
+    <a href="/gallery">Go to Gallery</a>
+</body>
+
+</html>
