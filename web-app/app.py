@@ -3,13 +3,15 @@ from werkzeug.utils import secure_filename
 import os
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from datetime import datetime
+import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
-# Load environment variables
+# load environment variables
 mongo_uri = os.environ.get('MONGO_URI')
-flask_port = os.environ.get('FLASK_RUN_PORT', 5000)
+flask_port = os.environ.get('FLASK_RUN_PORT')
 
 client = MongoClient(mongo_uri)
 db = client['image_emotion_db']
@@ -20,19 +22,21 @@ def home():
     if request.method == 'POST':
         image_file = request.files['image']
         if image_file:
-            filename = secure_filename(image_file.filename)
+            # create a unique filename using current timestamp
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            filename = secure_filename(f"{timestamp}_{image_file.filename}")
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             image_file.save(file_path)
-            
-            # Insert into DB
+
+            # insert into DB
             object_id = images_collection.insert_one({
                 'image_ref': file_path,
                 'processed': False,
                 'emotion': 'none'
             }).inserted_id
-            
+
             return jsonify({'message': 'Image uploaded successfully', 'object_id': str(object_id)})
-    
+
     return render_template('home.html')
 
 @app.route('/gallery')
