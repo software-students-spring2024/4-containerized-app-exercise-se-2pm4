@@ -1,11 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "879dc4ba3790573355ca93a887b18626b28086f514439db9c8dc99d28147ed27"
+            "sha256": "1bdb93db3a202502be588a60fa66946d1c06a9971d5e4b3f0486d650c1d6a485"
         },
         "pipfile-spec": 6,
         "requires": {
-            "python_version": "3.9"
+            "python_version": "3.10"
         },
         "sources": [
             {
@@ -372,14 +372,6 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==3.6"
-        },
-        "importlib-metadata": {
-            "hashes": [
-                "sha256:30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570",
-                "sha256:b78938b926ee8d5f020fc4772d487045805a55ddbad2ecf21c6d60938dc7fcd2"
-            ],
-            "markers": "python_version < '3.10'",
-            "version": "==7.1.0"
         },
         "isort": {
             "hashes": [
@@ -1027,7 +1019,7 @@
                 "sha256:83f085bd5ca59c80295fc2a82ab5dac679cbe02b9f33f7d83af68e241bea51b0",
                 "sha256:c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a"
             ],
-            "markers": "python_version < '3.10'",
+            "markers": "python_version < '3.11'",
             "version": "==4.11.0"
         },
         "tzdata": {
@@ -1137,14 +1129,6 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==1.16.0"
-        },
-        "zipp": {
-            "hashes": [
-                "sha256:206f5a15f2af3dbaee80769fb7dc6f249695e940acca08dfb2a4769fe61e538b",
-                "sha256:2884ed22e7d8961de1c9a05142eb69a247f120291bc0206a00a7642f09b5b715"
-            ],
-            "markers": "python_version >= '3.8'",
-            "version": "==3.18.1"
         }
     },
     "develop": {}
