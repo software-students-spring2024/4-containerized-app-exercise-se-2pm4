@@ -1,6 +1,17 @@
-version: '3.8'
-services:
-  mongodb:
-    image: mongo
+version: "3.8"
+db:
+    image: mongo:6.0 # use a recent version of the official MongoDB image on Docker Hub
+    container_name: mongodb_server
     ports:
-      - "27017:27017"
+      - 27017:27017
+    env_file: ./.env
+    environment:
+      - DB_URL: mongodb://db/imgdata
+      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
+    volumes:
+      - imgdata: /data/db
+
+# Volumes define
+volumes: 
+  mydata:
