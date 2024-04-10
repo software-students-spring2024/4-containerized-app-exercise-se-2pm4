@@ -12,7 +12,7 @@ app.config["UPLOAD_FOLDER"] = "static/uploads"
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
 # load environment variables
-#mongo_uri = os.environ.get("MONGO_URI")
+# mongo_uri = os.environ.get("MONGO_URI")
 flask_port = os.environ.get("FLASK_RUN_PORT")
 MONGO_HOST = os.environ.get("DB_HOST", "mongodb_server")
 
@@ -23,7 +23,7 @@ DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 mongo_uri = f"mongodb://{DB_USER}:{DB_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}"
 client = MongoClient(mongo_uri)
-#db = client["image_emotion_db"]
+# db = client["image_emotion_db"]
 db = client.get_database(MONGO_DB)
 images_collection = db["images"]
 
