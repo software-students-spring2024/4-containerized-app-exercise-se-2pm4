@@ -15,7 +15,7 @@ RUN pip3 install -r requirements.txt
 ADD . .
 
 # expose the port that the Flask app is running on... by default 5000
-EXPOSE 5000
+EXPOSE 3000
 
 # Run app.py when the container launches
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
