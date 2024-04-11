@@ -1,8 +1,13 @@
+"""
+This module contains the main functionality for the machine learning client.
+"""
 import os
 import time
 import schedule
 from pymongo import MongoClient
-from deepface import DeepFace
+
+# pylint: disable=import-error
+from deepface import DeepFace # deepface installed from requirements.txt in docker container
 
 MONGO_HOST = os.environ.get("DB_HOST", "mongodb_server")
 
@@ -19,7 +24,7 @@ images_collection = db["images"]
 
 
 def find_unprocessed_data():
-
+    '''This function is used to process unprocessed images to include emotion attributepy'''
     images_need_processing = images_collection.find({"processed": False})
 
     for image in images_need_processing:
