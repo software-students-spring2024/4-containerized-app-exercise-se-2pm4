@@ -1,0 +1,236 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: orange;
+}
+
+.wrapper {
+    margin-top: 50px;
+    width: 450px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px; /* Add spacing between calendar and todo list */
+}
+
+.wrapper header {
+    display: flex;
+    align-items: center;
+    padding: 25px 30px 10px;
+    justify-content: space-between;
+}
+
+header {
+    font-size: 1.45rem;
+    font-weight: 500;
+}
+h1{
+    color: white;
+    font-family: cursive;
+    text-align: center;
+    padding-top: 100px;
+    font-size: 3rem;
+    line-height: 38px;
+    border-radius: 50%;
+}
+
+
+a {
+    text-decoration: none; /* Remove underlines */
+    color: inherit; /* Use the parent's color (usually black or as specified by the parent element) */
+}
+
+header .icons span {
+    height: 38px;
+    width: 38px;
+    color: #878787;
+    font-size: 1.9rem;
+    margin: 0 1px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 38px;
+    border-radius: 50%;
+}
+
+header .icons span:last-child {
+    margin-right: -10px
+}
+
+header .icons span:hover {
+    background: #f2f2f2
+}
+
+.calendar {
+    padding: 20px;
+}
+
+.calendar ul {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.calendar .days {
+    margin-bottom: 20px;
+}
+
+.calendar .weeks li {
+    font-weight: 500;
+}
+
+.calendar ul li {
+    position: relative;
+    width: calc(100%/7);
+}
+
+.calendar .days li {
+    z-index: 1;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+.days li.inactive {
+    color: #aaa;
+}
+
+.days li.active {
+    color: #fff;
+}
+
+.calendar .days li::before{
+    position: absolute;
+    content: "";
+    height: 40px;
+    width: 40px;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.days li:hover::before {
+    background: #f2f2f2
+}
+
+.days li.active::before {
+    background: #32936F;
+}
+
+.days li.event::after {
+    content: "";
+    position: absolute;
+    height: 5px;
+    width: 5px;
+    background-color: red;
+    border-radius: 50%;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.todo-wrapper {
+    width: 450px; /* Adjust width as needed */
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.todo-list {
+    list-style: none;
+    padding: 20px;
+}
+
+.todo-list li {
+    margin-bottom: 10px;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.upload-event-button,
+.gallery-event-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: orange;
+    color: #fff;
+    border: none;
+    font-family: cursive;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 150px; 
+    font-size: 30px;
+    float: left;
+    margin-right: 120px;
+}
+.upload-event-button,
+.gallery-event-button:hover {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: orange;
+    color: black;
+    border: none;
+    font-family: cursive;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 150px; 
+    font-size: 30px;
+    float: left;
+    margin-right: 120px;
+}
+
+
+.delete-event-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background-color: #D9534F; /* Red color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-event-button:hover {
+    background-color: #C9302C; /* Darker shade of red on hover */
+    
+}
+
+.capture-button:hover{
+    background-color: #2c46c9; 
+}
+
+.capture-button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: orange;
+    color: #fff;
+    border: none;
+    font-family: cursive;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 150px;
+}
+
+.wrapper .search-button:hover {
+    background-color: #276C56;
+}
