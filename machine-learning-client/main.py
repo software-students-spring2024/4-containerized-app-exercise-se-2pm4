@@ -1,9 +1,7 @@
 import os
-from pymongo import MongoClient
-import schedule
 import time
-
-"""Module for face analysis"""
+import schedule
+from pymongo import MongoClient
 from deepface import DeepFace
 
 MONGO_HOST = os.environ.get("DB_HOST", "mongodb_server")
@@ -48,7 +46,7 @@ while True:
 # finding images
 
 
-print("Emotion:", face_analysis[0]["dominant_emotion"])
-print("Gender:", face_analysis[0]["dominant_gender"])
-print("Age:", face_analysis[0]["age"])
-print("Race:", face_analysis[0]["dominant_race"])
+#print("Emotion:", face_analysis[0]["dominant_emotion"])
+#print("Gender:", face_analysis[0]["dominant_gender"])
+#print("Age:", face_analysis[0]["age"])
+#print("Race:", face_analysis[0]["dominant_race"])
