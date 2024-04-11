@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Image Gallery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
     <h1>Image Gallery</h1>
-    <div>
+    <div class="wrapper">
         {% for image in images %}
             <div>
                 <img src="{{ image.image_ref }}" alt="Uploaded Image" style="width: 200px;">
@@ -14,6 +16,8 @@
             </div>
         {% endfor %}
     </div>
-    <a href="/">Go back home</a>
+    <div>
+    <a href="/"><button class="gallery-event-button">Go back home</button></a>
+    </div>
 </body>
 </html>

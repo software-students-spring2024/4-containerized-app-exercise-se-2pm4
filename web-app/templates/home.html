@@ -4,15 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Capture and Upload Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
     <h1>Capture an Image</h1>
+    <div class="wrapper">
     <video id="video" width="640" height="480" autoplay></video>
-    <button id="snap">Capture</button>
+    <button id="snap" class="capture-button" >Capture</button>
+    </div>
     <canvas id="canvas" width="640" height="480"></canvas>
-    <button id="upload">Upload Image</button>
-    <a href="/gallery"><button>Go to Gallery</button></a>
+    <div>
+    <button id="upload" class="upload-event-button" >Upload Image</button>
+    <a href="/gallery"><button class="gallery-event-button">Go to Gallery</button></a>
+    </div>
 
     <script>
         'use strict';
