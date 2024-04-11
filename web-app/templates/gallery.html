@@ -9,7 +9,7 @@
     <div>
         {% for image in images %}
             <div>
-                <img src="{{ url_for('static', filename='uploads/' ~ image.image_ref) }}" alt="Uploaded Image" style="width: 200px;">
+                <img src="{{ image.image_ref }}" alt="Uploaded Image" style="width: 200px;">
                 <p>Emotion: {{ image.emotion }}</p>
             </div>
         {% endfor %}

@@ -42,7 +42,7 @@ def home():
 
             # insert into DB
             object_id = images_collection.insert_one(
-                {"image_ref": file_path, "processed": False, "emotion": "none"}
+                {"image_ref": file_path, "processed": False, "emotion": "loading..."}
             ).inserted_id
             print(object_id)
             return jsonify(
