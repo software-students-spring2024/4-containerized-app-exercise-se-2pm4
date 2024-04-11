@@ -11,6 +11,7 @@ tf-keras = "*"
 pymongo = "*"
 schedule = "*"
 tomli = "*"
+dill = "*"
 
 [dev-packages]
 
