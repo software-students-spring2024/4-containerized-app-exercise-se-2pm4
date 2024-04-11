@@ -5,9 +5,7 @@ import os
 import time
 import schedule
 from pymongo import MongoClient
-
-# pylint: disable=import-error
-from deepface import DeepFace # deepface installed from requirements.txt in docker container
+from deepface import DeepFace
 
 MONGO_HOST = os.environ.get("DB_HOST", "mongodb_server")
 
