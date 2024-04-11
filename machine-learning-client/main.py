@@ -1,6 +1,7 @@
 """
 This module contains the main functionality for the machine learning client.
 """
+
 import os
 import time
 import schedule
@@ -22,7 +23,7 @@ images_collection = db["images"]
 
 
 def find_unprocessed_data():
-    '''This function is used to process unprocessed images to include emotion attributepy'''
+    """This function is used to process unprocessed images to include emotion attributepy"""
     images_need_processing = images_collection.find({"processed": False})
 
     for image in images_need_processing:
@@ -49,7 +50,7 @@ while True:
 # finding images
 
 
-#print("Emotion:", face_analysis[0]["dominant_emotion"])
-#print("Gender:", face_analysis[0]["dominant_gender"])
-#print("Age:", face_analysis[0]["age"])
-#print("Race:", face_analysis[0]["dominant_race"])
+# print("Emotion:", face_analysis[0]["dominant_emotion"])
+# print("Gender:", face_analysis[0]["dominant_gender"])
+# print("Age:", face_analysis[0]["age"])
+# print("Race:", face_analysis[0]["dominant_race"])
