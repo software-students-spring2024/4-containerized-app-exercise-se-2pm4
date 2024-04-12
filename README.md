@@ -3,37 +3,73 @@
 # Containerized App Exercise
 
 Build a containerized app that uses machine learning. See [instructions](./instructions.md) for details.
+## Project Overview 
 
-## Instructions for setting up database
+This project consists of 3 parts: machine-learning client, web-app, and database. A user can upload photos in the web-app and view the emotion of the image which is processed by the machine-learning client. 
 
-These instructions will guide you through the process of pulling a Docker image from Docker Hub and creating a container from it. To ensure that groupmates are working on the same database instance, the container_name, port_number, username, password should be the same among groupmates.
+## Teammates participating in this project
+
+1. Brandon Tang: [Github profile](https://github.com/Tango117)
+2. Joseph Lee: [Github profile](https://github.com/pastuhhhh)
+3. Minjae Lee: [Github profile](https://github.com/minjae07206)
+4. Yiwei Luo: [Github profile](https://github.com/yl7408)
+
+## Instructions to run this project
+
+### Prerequisites & Disclaimers: 
+- This project requires the user to download docker. If you have not made an account or downloaded docker, you can do it [here](https://www.docker.com/products/docker-desktop/).
+- The `docker-compose.yml` file has environment variables hidden in a `.env` file. Either request the `.env` file from the developer or create your own `.env` file and include variables. All variables inside ${} are variables coming from the .env file. The `.env` file must be placed in the same directory(the root directory) as the `docker-compose.yml`.
+- All images are stored locally. There is no need to import any starter data into the database.
 
 
-1. Open a terminal or command prompt.
-2. Run the following command to pull the Docker image from Docker Hub:
+### Running the project in 3 docker containers
 
-    ```
-    docker pull minjae07206/se2pm4-database
-    ```
-    
-3. Run the following command to create a new container from the image that was pulled. Replace <container_name> and <port_number> with your choice. The username and password can be changed as well.
+1. Open the terminal and direct to the root directory of the project. Then, run the command below. 
+```
+docker-compose up -d --build
+```
+`up` command is to create and start containers based on the configuartions specified in the `docker-compose.yml` file.
+`-d` flag is the detached mode, it starts the containers in the background.
+`--build` flag builds any image in the `docker-compose.yml` file if it has not been built already.
 
-    ```
-    docker run --name <container_name> -v ~/data:/data/db -p <port_number>:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=secret -d minjae07206/se2pm4-database:latest
-    ```
-4. Run the following command to exectue the container. Again, replace the <container_name> with the name that was used for container creation in step 3.
-    ```
-    docker exec -ti <container_name> bash
-    ```
-5. Run the command to start mongosh. Change the username and password may be changed.
-    ```
-    mongosh -u admin -p secret
-    ```
-6. 
-    ```
-    show dbs
-    ```
-7. If "test" is in the list of dbs, the database has been successfully installed. You can run mongodb commands to execute CRUD operations. The name of the collection used is imgdata.
-    ```
-    db.imgdata.find()
-    ```
+2. After all the containers start(might take a while), the user can head to [localhost:5000](http://localhost:5000/) in a browser, to view the web-app where the user can capture photos and upload them. 
+
+3. Once a user uploads the photo, the user can click on the "gallery" button to see the image emotion results. The machine learning client does not have a backend, so runs every 30 seconds to check if there are images that have not been processed and processes them. Therefore, it can take a maximum of 30 seconds to see the image emotion result. 
+
+4. If the user wishes to manually do CRUD operations on the database, read the section on "Managing the Database" below.
+
+5. When the user is done with the application, run the command below to stop all the containers.
+
+```
+docker-compose down
+```
+
+### Managing the Database
+
+1. The access the MongoDB data, first run:
+
+```
+docker exec -it mongodb_server bash
+```
+
+2. The command above will open a bash shell inside the mongodb_server container. Then run the command below. The <username> and <password> are inside the `.env`, indicated by `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD`.
+
+```
+mongosh -u <username> -p <password>
+```
+
+3. The command above will open a mongodb shell. First, switch to the database that is used: the <database_name> is also in the `.env` file, indicated by `MONGO_DB`
+
+```
+use <database_name>
+```
+
+4. Finally, the user can find the collection inside the database and run CRUD commands. `images` is the name of the collection where data is stored. Here is a example command.
+
+```
+db.images.find()
+```
+
+
+
+
