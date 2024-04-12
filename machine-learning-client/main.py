@@ -17,7 +17,6 @@ DB_USER = os.environ.get("DB_USER")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
 mongo_uri = f"mongodb://{DB_USER}:{DB_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}"
 client = MongoClient(mongo_uri)
-# db = client["image_emotion_db"]
 db = client.get_database(MONGO_DB)
 images_collection = db["images"]
 
