@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 flask = "*"
 pymongo = "*"
+schedule = "*"
+deepface = "*"
+black = "*"
 
 [dev-packages]
 
