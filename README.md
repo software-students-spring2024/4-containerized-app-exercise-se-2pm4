@@ -9,7 +9,7 @@ This project consists of 3 parts: machine-learning client, web-app, and database
 
 ## Teammates participating in this project
 
-1. Brandon Tang: [Github profile](https://github.com/Tango117)
+1. Brendan Tang: [Github profile](https://github.com/Tango117)
 2. Joseph Lee: [Github profile](https://github.com/pastuhhhh)
 3. Minjae Lee: [Github profile](https://github.com/minjae07206)
 4. Yiwei Luo: [Github profile](https://github.com/yl7408)
