@@ -12,6 +12,7 @@ pymongo = "*"
 schedule = "*"
 tomli = "*"
 dill = "*"
+pytest = "*"
 
 [dev-packages]
 
