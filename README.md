@@ -38,6 +38,12 @@ docker-compose up -d --build
 
 4. If the user wishes to manually do CRUD operations on the database, read the section on "Managing the Database" below.
 
+5. When the user is done with the application, run the command below to stop all the containers.
+
+```
+docker-compose down
+```
+
 ### Managing the Database
 
 1. The access the MongoDB data, first run:
