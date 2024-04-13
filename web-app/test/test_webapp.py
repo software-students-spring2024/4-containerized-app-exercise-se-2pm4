@@ -3,8 +3,9 @@ TEST
 """
 from unittest.mock import patch, MagicMock
 import tempfile
-from app import app
 import pytest
+from app import app
+
 
 # Mocking the database collection
 # pylint: disable=W0621
@@ -75,8 +76,6 @@ class Tests:
                 data={"image": (tmp, "test_image.jpg")},
                 content_type="multipart/form-data",
             )
-            
             # Check database insertion
             assert response.status_code == 200
             assert b"Image uploaded successfully" in response.data
-
