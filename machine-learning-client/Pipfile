@@ -16,8 +16,5 @@ pytest = "*"
 
 [dev-packages]
 
-[scripts]
-test = "pytest"
-
 [requires]
 python_version = ">=3.10"
