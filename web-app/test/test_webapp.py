@@ -1,78 +1,85 @@
 """
-Module for testing DeepFace functionalities.
+TEST
 """
 
-import os
+from unittest.mock import patch, MagicMock
+import tempfile
 import pytest
-from flask import Flask
-from pymongo import MongoClient
-from bson.objectid import ObjectId
+from app import app
 
-app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "static/uploads"
-os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-# load environment variables
-# mongo_uri = os.environ.get("MONGO_URI")
-flask_port = os.environ.get("FLASK_RUN_PORT")
-MONGO_HOST = "localhost"
+# Mocking the database collection
+# pylint: disable=W0621
+# pylint: disable=W0613
+mock_collection = MagicMock()
 
-# Load environment variables for MongoDB connection
-MONGO_PORT = os.environ.get("MONGO_PORT", 27017)
-MONGO_DB = os.environ.get("MONGO_DB", "image_emotion_db")
-DB_USER = os.environ.get("DB_USER")
-DB_PASSWORD = os.environ.get("DB_PASSWORD")
-mongo_uri = f"mongodb://{DB_USER}:{DB_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}"
-client = MongoClient(mongo_uri)
-# db = client["image_emotion_db"]
-db = client.get_database(MONGO_DB)
-images_collection = db["images"]
+
+@pytest.fixture(scope="module")
+def test_client():
+    """
+    test client
+    """
+    flask_app = app
+    testing_client = flask_app.test_client()
+    ctx = flask_app.app_context()
+    ctx.push()
+    yield testing_client
+    ctx.pop()
+
+
+@pytest.fixture
+def monkey_db():
+    """Fixture to mock the MongoDB collection."""
+    with patch("app.images_collection", mock_collection):
+        yield mock_collection
 
 
 class Tests:
-    """
-    Test class for DeepFace functionalities.
-    """
+    """Class for testing web-app."""
 
-    @pytest.fixture
-    def test_home_get(self):
-        """
-        Test the app GET home route at launch
-        """
-        response = client.get("/")
-        assert response.status_code == 200
+    def test_sanity_check(self):
+        """Function sanity check."""
+        expected = True
+        actual = True
+        assert actual == expected, "Expected True to be equal to True!"
 
-    def test_home_post(self):
-        """
-        Test does the app respond to a given image.
-        """
-        test_img_path = (
-            "/Users/yiweiluo/4-containerized-app-exercise-se-2pm4/web-app/img/man.jpg"
-        )
-        with open(test_img_path, "rb") as image_file:
-            image_data = image_file.read()
-        response = client.post(
-            "/",
-            data={"image": (image_data, "man.jpg")},
-            content_type="multipart/form-data",
-        )
+    def test_index(self):
+        """Function testing index."""
+        response = app.test_client().get("/")
         assert response.status_code == 200
 
     def test_gallery_route(self):
-        """
-        Test the app GET gallery route at launch
-        """
-        response = client.get("/gallery")
-        assert response.status_code == 200
+        """Function testing gallery route."""
+        # Mocking find method
+        mock_collection.find.return_value = [
+            {"_id": "some_object_id", "processed": False, "emotion": "loading..."}
+        ]
 
-    def test_check_status(self):
+        with patch("app.images_collection", mock_collection):
+            with app.test_client() as client:
+                response = client.get("/gallery")
+                assert response.status_code == 200
+                assert b"loading..." in response.data
+
+    def test_home_post_file_upload(self, test_client, monkey_db):
         """
-        Test the whether image id are generated correctly
+        Test the file upload and database insertion.
         """
-        sample_id = "sample_id"
-        images_collection.insert_one(
-            {"_id": sample_id, "processed": False, "emotion": "happy"}
-        )
-        response = images_collection.find_one({"_id": ObjectId(sample_id)})
-        assert response == 200
-        images_collection.delete_many({})
+
+        # Mocking insert_one method
+        mock_collection.insert_one.return_value.inserted_id = "some_object_id"
+
+        # Create a temporary image file
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
+            tmp.write(b"some_image_binary_data")
+            tmp.flush()
+
+            # Send POST request with the temporary image file
+            response = test_client.post(
+                "/",
+                data={"image": (tmp, "test_image.jpg")},
+                content_type="multipart/form-data",
+            )
+            # Check database insertion
+            assert response.status_code == 200
+            assert b"Image uploaded successfully" in response.data

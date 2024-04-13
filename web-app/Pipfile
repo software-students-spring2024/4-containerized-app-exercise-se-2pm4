@@ -12,8 +12,10 @@ pytest = "*"
 tomli = "*"
 typing-extensions = "*"
 dill = "*"
+exceptiongroup = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = ">=3.10"
