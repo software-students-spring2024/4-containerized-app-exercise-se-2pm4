@@ -1,6 +1,7 @@
 """
 Module for testing DeepFace functionalities.
 """
+
 import os
 import pytest
 from flask import Flask
