@@ -1,5 +1,5 @@
 """
-Module for testing DeepFace functionalities.
+Module for testing Web-app functionalities.
 """
 
 import pytest
@@ -16,9 +16,9 @@ client = MongoClient("mongodb://localhost:27017/")
 db = client.get_database("image_emotion_db")
 images_collection = db["images"]
 
-class TestDeepFace:
+class TestWebapp:
     """
-    Test class for DeepFace functionalities.
+    Test class for Web-app functionalities.
     """
 
     @pytest.fixture
