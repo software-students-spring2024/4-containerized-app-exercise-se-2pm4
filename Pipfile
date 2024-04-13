@@ -8,6 +8,7 @@ deepface = "*"
 coverage = "*"
 tf-keras = "*"
 pytest = "*"
+pylint = "*"
 
 [dev-packages]
 
