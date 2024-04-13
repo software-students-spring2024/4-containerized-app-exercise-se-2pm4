@@ -21,4 +21,5 @@ jobs:
 
       - name: Test with pytest
         run: |
+          cd machine-learning-client
           pipenv run pytest test_mlc_deepface.py
