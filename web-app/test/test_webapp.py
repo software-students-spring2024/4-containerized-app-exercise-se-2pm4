@@ -17,7 +17,7 @@ def test_app_client():
     with app.test_client() as client:
         yield client
 
-def test_home_post(test_app_client2, monkeypatch):
+def test_home_post(test_app_client, monkeypatch):
     """
     Test the POST request to the home page with a sample image.
     """
@@ -36,7 +36,7 @@ def test_home_post(test_app_client2, monkeypatch):
         image_data = image_file.read()
 
     # Send POST request with test image
-    response = test_app_client2.post(
+    response = test_app_client.post(
         "/",
         data={"image": (image_data, "man.jpg")},
         content_type="multipart/form-data",
@@ -46,7 +46,7 @@ def test_home_post(test_app_client2, monkeypatch):
     assert response.status_code == 200
     assert b"Image uploaded successfully" in response.data
 
-def test_gallery_route(test_app_client1, monkeypatch):
+def test_gallery_route(test_app_client, monkeypatch):
     """
     Test the GET request to the gallery page.
     """
@@ -62,7 +62,7 @@ def test_gallery_route(test_app_client1, monkeypatch):
     ]
 
     # Send GET request to gallery
-    response = test_app_client1.get("/gallery")
+    response = test_app_client.get("/gallery")
 
     # Check response
     assert response.status_code == 200
