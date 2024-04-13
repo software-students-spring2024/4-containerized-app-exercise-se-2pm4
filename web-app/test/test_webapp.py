@@ -1,5 +1,5 @@
 """
-Module for testing DeepFace functionalities.
+Module for testing Web-app functionalities.
 """
 
 import os
@@ -7,7 +7,7 @@ import pytest
 from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-
+import app
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
@@ -15,7 +15,7 @@ os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 # load environment variables
 # mongo_uri = os.environ.get("MONGO_URI")
 flask_port = os.environ.get("FLASK_RUN_PORT")
-MONGO_HOST = "localhost"
+MONGO_HOST = os.environ.get("DB_HOST", "mongodb_server")
 
 # Load environment variables for MongoDB connection
 MONGO_PORT = os.environ.get("MONGO_PORT", 27017)
@@ -39,7 +39,7 @@ class Tests:
         """
         Test the app GET home route at launch
         """
-        response = client.get("/")
+        response = app.test_client().get("/")
         assert response.status_code == 200
 
     def test_home_post(self):
@@ -47,11 +47,11 @@ class Tests:
         Test does the app respond to a given image.
         """
         test_img_path = (
-            "/Users/yiweiluo/4-containerized-app-exercise-se-2pm4/web-app/img/man.jpg"
+            "web-app\img\man.jpg"
         )
         with open(test_img_path, "rb") as image_file:
             image_data = image_file.read()
-        response = client.post(
+        response = app.test_client().post(
             "/",
             data={"image": (image_data, "man.jpg")},
             content_type="multipart/form-data",
@@ -62,7 +62,7 @@ class Tests:
         """
         Test the app GET gallery route at launch
         """
-        response = client.get("/gallery")
+        response = app.test_client().get("/gallery")
         assert response.status_code == 200
 
     def test_check_status(self):
