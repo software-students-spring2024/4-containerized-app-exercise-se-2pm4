@@ -69,9 +69,9 @@ class Tests:
     with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
         tmp.write(b"some_image_binary_data")
         tmp.flush()
-
+        client = app.test_client()
         # Send POST request with the temporary image file
-        response = test_app_client.post(
+        response = client.post(
             "/",
             data={"image": (tmp, "test_image.jpg")},
             content_type="multipart/form-data",
