@@ -2,11 +2,11 @@
 Module for testing Web-app functionalities.
 """
 
+import os
 import pytest
 from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import app
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
@@ -33,7 +33,7 @@ class TestWebapp:
         """
         Test the POST request to the home page with a sample image.
         """
-        test_img_path = "../img/.jpg"
+        test_img_path = os.path.join(os.path.dirname(__file__), "../img/man.jpg")
         with open(test_img_path, "rb") as image_file:
             image_data = image_file.read()
         response = app.test_client().post(
