@@ -1,7 +1,7 @@
 """ Module for testing app.py. """
-
+import os
 from unittest.mock import patch, MagicMock
-from io import BytesIO
+import tempfile
 from app import app
 import pytest
 
@@ -55,27 +55,36 @@ class Tests:
 
 
 
-    def test_home_post(self, test_app_client, monkeypatch):
-        """Test the POST request to the home page with simulated image data."""
+    def test_home_post_file_upload(self, test_app_client, monkeypatch):
+        """Test the file upload functionality."""
         monkeypatch.setenv("FLASK_RUN_PORT", "5000")
         monkeypatch.setenv("DB_HOST", "localhost")
         monkeypatch.setenv("MONGO_PORT", "27017")
         monkeypatch.setenv("MONGO_DB", "test_db")
-    
+
         # Mocking insert_one method
         mock_collection.insert_one.return_value.inserted_id = "some_object_id"
-    
-        # Simulate image data
-        image_data = BytesIO(b"some_image_binary_data")
-    
-        # Send POST request with simulated image data
-        response = test_app_client.post(
-        "/",
-        data={"image": (image_data, "test_image.jpg")},
-        content_type="multipart/form-data",
-    )
-    
-        # Check response
-        assert response.status_code == 200
-        assert b"Image uploaded successfully" in response.data
+
+        # Create a temporary image file
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
+            tmp.write(b"some_image_binary_data")
+            tmp.flush()
+
+            # Open the temporary file to read the content
+            with open(tmp.name, "rb") as tmp_file:
+                image_data = tmp_file.read()
+
+            # Send POST request with the temporary image file
+            response = test_app_client.post(
+                "/",
+                data={"image": (image_data, "test_image.jpg")},
+                content_type="multipart/form-data",
+            )
+
+            # Check file storage
+            assert os.path.exists(f"static/uploads/{tmp.name.split('/')[-1]}")
+
+            # Check database insertion
+            assert response.status_code == 200
+            assert b"Image uploaded successfully" in response.data
 
