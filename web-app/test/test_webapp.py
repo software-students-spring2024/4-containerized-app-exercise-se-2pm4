@@ -1,6 +1,7 @@
 """
 TEST
 """
+
 from unittest.mock import patch, MagicMock
 import tempfile
 import pytest
@@ -12,7 +13,8 @@ from app import app
 # pylint: disable=W0613
 mock_collection = MagicMock()
 
-@pytest.fixture(scope='module')
+
+@pytest.fixture(scope="module")
 def test_client():
     """
     test client
@@ -24,11 +26,13 @@ def test_client():
     yield testing_client
     ctx.pop()
 
+
 @pytest.fixture
 def monkey_db():
     """Fixture to mock the MongoDB collection."""
-    with patch('app.images_collection', mock_collection):
+    with patch("app.images_collection", mock_collection):
         yield mock_collection
+
 
 class Tests:
     """Class for testing web-app."""
