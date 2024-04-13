@@ -12,6 +12,8 @@ pytest = "*"
 tomli = "*"
 typing-extensions = "*"
 dill = "*"
+testapp = "*"
+webtest = "*"
 
 [dev-packages]
 
