@@ -33,7 +33,7 @@ class TestWebapp:
         """
         Test the POST request to the home page with a sample image.
         """
-        test_img_path = "path/to/sample/image.jpg"
+        test_img_path = "../img/.jpg"
         with open(test_img_path, "rb") as image_file:
             image_data = image_file.read()
         response = app.test_client().post(
