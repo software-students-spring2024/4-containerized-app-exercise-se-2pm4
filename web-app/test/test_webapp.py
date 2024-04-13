@@ -1,10 +1,8 @@
-""" Module for testing app.py. """
 import os
 from unittest.mock import patch, MagicMock
 import tempfile
 from app import app
 import pytest
-
 
 # Mocking the database collection
 mock_collection = MagicMock()
@@ -23,9 +21,8 @@ def monkey_db():
         yield mock_collection
 
 class Tests:
-    '''
-    class for testing web-app
-    '''
+    """Class for testing web-app."""
+
     def test_sanity_check(self):
         """Function sanity check."""
         expected = True
@@ -36,11 +33,9 @@ class Tests:
         """Function testing index."""
         response = app.test_client().get("/")
         assert response.status_code == 200
-    
+
     def test_gallery_route(self):
-        '''
-        gallery test
-        '''
+        """Function testing gallery route."""
         # Mocking find method
         mock_collection.find.return_value = [
             {"_id": "some_object_id", "processed": False, "emotion": "loading..."}
@@ -52,16 +47,15 @@ class Tests:
                 assert response.status_code == 200
                 assert b"loading..." in response.data
 
-
-
-
-    def test_home_post_file_upload(self, test_app_client, monkeypatch):
-        """Test the file upload functionality."""
-        monkeypatch.setenv("FLASK_RUN_PORT", "5000")
-        monkeypatch.setenv("DB_HOST", "localhost")
-        monkeypatch.setenv("MONGO_PORT", "27017")
-        monkeypatch.setenv("MONGO_DB", "test_db")
-
+    def test_home_post_file_upload(self, test_app_client, monkey_db):
+        """Test the file upload and database insertion."""
+        
+        # Mock environment variables
+        os.environ["FLASK_RUN_PORT"] = "5000"
+        os.environ["DB_HOST"] = "localhost"
+        os.environ["MONGO_PORT"] = "27017"
+        os.environ["MONGO_DB"] = "test_db"
+        
         # Mocking insert_one method
         mock_collection.insert_one.return_value.inserted_id = "some_object_id"
 
@@ -87,4 +81,5 @@ class Tests:
             # Check database insertion
             assert response.status_code == 200
             assert b"Image uploaded successfully" in response.data
+
 
