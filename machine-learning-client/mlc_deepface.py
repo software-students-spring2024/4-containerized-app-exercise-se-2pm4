@@ -21,35 +21,41 @@ db = client.get_database(MONGO_DB)
 images_collection = db["images"]
 
 
+def get_dominant_emotion(path):
+    """This function is used to get the dominant emotion"""
+    if not path:
+        return "No path"
+    if not os.path.exists(path):
+        return "Invalid path"
+    data = DeepFace.analyze(img_path=path, enforce_detection=False)
+    return data[0]["dominant_emotion"]
+
+
 def find_unprocessed_data():
-    """This function is used to process unprocessed images to include emotion attributepy"""
+    """This function is used to process unprocessed images to include emotion attribute"""
     images_need_processing = images_collection.find({"processed": False})
 
     for image in images_need_processing:
-        face_analysis = DeepFace.analyze(
-            img_path=image["image_ref"], enforce_detection=False
-        )
+        dominant_emotion = get_dominant_emotion(image["image_ref"])
         images_collection.update_one(
             {"_id": image["_id"]},
             {
                 "$set": {
                     "processed": True,
-                    "emotion": face_analysis[0]["dominant_emotion"],
+                    "emotion": dominant_emotion,
                     # Add the date time now here
                 }
             },
         )
 
 
-schedule.every(30).seconds.do(find_unprocessed_data)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+def main():
+    """Main function"""
+    schedule.every(30).seconds.do(find_unprocessed_data)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-# finding images
 
-
-# print("Emotion:", face_analysis[0]["dominant_emotion"])
-# print("Gender:", face_analysis[0]["dominant_gender"])
-# print("Age:", face_analysis[0]["age"])
-# print("Race:", face_analysis[0]["dominant_race"])
+if __name__ == "__main__":
+    main()

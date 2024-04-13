@@ -4,6 +4,7 @@ Module for testing DeepFace functionalities.
 
 import pytest
 from deepface import DeepFace
+import mlc_deepface
 
 
 class Tests:
@@ -17,6 +18,13 @@ class Tests:
         Fixture to return the path of the test image within the test class.
         """
         return "./img/man.jpg"
+
+    @pytest.fixture
+    def test_invalid_img_path(self):
+        """
+        Fixture to return the path of the invalid path test image within the test class.
+        """
+        return "./img/duck.jpg"
 
     def test_sanity_check(self):
         """
@@ -53,3 +61,24 @@ class Tests:
         assert "gender" in result
         assert "race" in result
         assert "emotion" in result
+
+    def test_no_path(self):
+        """
+        Test case where no path is given.
+        """
+        dominant_emotion = mlc_deepface.get_dominant_emotion("")
+        assert dominant_emotion == "No path"
+
+    def test_invalid_path(self, test_invalid_img_path):
+        """
+        Test case where invalid path is given.
+        """
+        dominant_emotion = mlc_deepface.get_dominant_emotion(test_invalid_img_path)
+        assert dominant_emotion == "Invalid path"
+
+    def test_get_dominant_emotion_with_valid_path(self, test_img_path):
+        """
+        Test case where valid path is given.
+        """
+        dominant_emotion = mlc_deepface.get_dominant_emotion(test_img_path)
+        assert dominant_emotion == "neutral"
