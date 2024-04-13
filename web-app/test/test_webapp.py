@@ -7,7 +7,6 @@ import pytest
 from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import app
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
