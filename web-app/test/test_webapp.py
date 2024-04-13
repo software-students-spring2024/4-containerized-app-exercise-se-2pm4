@@ -2,9 +2,8 @@
 Module for testing DeepFace functionalities.
 """
 
-import os
-from flask import Flask
 import pytest
+from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
@@ -36,6 +35,9 @@ class Tests:
 
     @pytest.fixture
     def test_home_get(self):
+        """
+        Test the app GET home route at launch
+        """
         response = client.get("/")
         assert response.status_code == 200
 
@@ -56,10 +58,16 @@ class Tests:
         assert response.status_code == 200
 
     def test_gallery_route(self):
+        """
+        Test the app GET gallery route at launch
+        """
         response = client.get("/gallery")
         assert response.status_code == 200
 
     def test_check_status(self):
+        """
+        Test the whether image id are generated correctly
+        """
         sample_id = "sample_id"
         images_collection.insert_one(
             {"_id": sample_id, "processed": False, "emotion": "happy"}
