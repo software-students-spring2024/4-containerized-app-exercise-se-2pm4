@@ -35,12 +35,11 @@ class Tests:
     """
 
     @pytest.fixture
-    def test_home_get(client):
+    def test_home_get(self):
         response = client.get("/")
         assert response.status_code == 200
 
-    @pytest.fixture
-    def test_home_post(client):
+    def test_home_post(self):
         """
         Test does the app respond to a given image.
         """
@@ -56,13 +55,11 @@ class Tests:
         )
         assert response.status_code == 200
 
-    @pytest.fixture
-    def test_gallery_route(client):
+    def test_gallery_route(self):
         response = client.get("/gallery")
         assert response.status_code == 200
 
-    @pytest.fixture
-    def test_check_status(client):
+    def test_check_status(self):
         sample_id = "sample_id"
         images_collection.insert_one(
             {"_id": sample_id, "processed": False, "emotion": "happy"}
