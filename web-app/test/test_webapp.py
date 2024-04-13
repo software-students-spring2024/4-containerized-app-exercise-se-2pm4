@@ -51,37 +51,30 @@ class Tests:
                 assert response.status_code == 200
                 assert b"loading..." in response.data
 
-    def test_home_post_file_upload(self):
+    def test_home_post_file_upload(self, test_app_client, monkey_db):
         """
         Test the file upload and database insertion.
         """
 
-    # Mock environment variables
-    os.environ["FLASK_RUN_PORT"] = "5000"
-    os.environ["DB_HOST"] = "localhost"
-    os.environ["MONGO_PORT"] = "27017"
-    os.environ["MONGO_DB"] = "test_db"
+        # Mocking insert_one method
+        mock_collection.insert_one.return_value.inserted_id = "some_object_id"
 
-    # Mocking insert_one method
-    mock_collection.insert_one.return_value.inserted_id = "some_object_id"
+        # Create a temporary image file
+        with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
+            tmp.write(b"some_image_binary_data")
+            tmp.flush()
 
-    # Create a temporary image file
-    with tempfile.NamedTemporaryFile(suffix=".jpg") as tmp:
-        tmp.write(b"some_image_binary_data")
-        tmp.flush()
-        client = app.test_client()
-        # Send POST request with the temporary image file
-        response = client.post(
-            "/",
-            data={"image": (tmp, "test_image.jpg")},
-            content_type="multipart/form-data",
-        )
+            # Send POST request with the temporary image file
+            response = test_app_client.post(
+                "/",
+                data={"image": (tmp, "test_image.jpg")},
+                content_type="multipart/form-data",
+            )
 
-        # Check file storage
-        assert os.path.exists(f"{app.config['UPLOAD_FOLDER']}/{tmp.name.split('/')[-1]}")
+            # Check file storage
+            assert os.path.exists(f"{app.config['UPLOAD_FOLDER']}/{tmp.name.split('/')[-1]}")
 
-        # Check database insertion
-        assert response.status_code == 200
-        assert b"Image uploaded successfully" in response.data
-
+            # Check database insertion
+            assert response.status_code == 200
+            assert b"Image uploaded successfully" in response.data
 
