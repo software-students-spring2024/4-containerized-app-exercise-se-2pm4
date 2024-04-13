@@ -1,7 +1,9 @@
 """ Module for testing app.py. """
 
-from app import app
 from unittest.mock import patch, MagicMock
+from io import BytesIO
+from app import app
+
 
 # Mocking the database collection
 mock_collection = MagicMock()
@@ -35,4 +37,31 @@ class Tests:
                 response = client.get("/gallery")
                 assert response.status_code == 200
                 assert b"loading..." in response.data
+
+
+
+
+    def test_home_post(self, test_app_client, monkeypatch):
+        """Test the POST request to the home page with simulated image data."""
+        monkeypatch.setenv("FLASK_RUN_PORT", "5000")
+        monkeypatch.setenv("DB_HOST", "localhost")
+        monkeypatch.setenv("MONGO_PORT", "27017")
+        monkeypatch.setenv("MONGO_DB", "test_db")
+    
+        # Mocking insert_one method
+        mock_collection.insert_one.return_value.inserted_id = "some_object_id"
+    
+        # Simulate image data
+        image_data = BytesIO(b"some_image_binary_data")
+    
+        # Send POST request with simulated image data
+        response = test_app_client.post(
+        "/",
+        data={"image": (image_data, "test_image.jpg")},
+        content_type="multipart/form-data",
+    )
+    
+        # Check response
+        assert response.status_code == 200
+        assert b"Image uploaded successfully" in response.data
 

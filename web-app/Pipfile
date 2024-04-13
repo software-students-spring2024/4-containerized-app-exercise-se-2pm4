@@ -13,6 +13,7 @@ tomli = "*"
 typing-extensions = "*"
 dill = "*"
 exceptiongroup = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
