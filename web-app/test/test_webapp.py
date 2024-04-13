@@ -7,6 +7,7 @@ import pytest
 from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from unittest.mock import patch, MagicMock
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
@@ -36,19 +37,32 @@ class TestWebapp:
         test_img_path = os.path.join(os.path.dirname(__file__), "../img/man.jpg")
         with open(test_img_path, "rb") as image_file:
             image_data = image_file.read()
-        response = app.test_client().post(
-            "/",
-            data={"image": (image_data, "man.jpg")},
-            content_type="multipart/form-data",
-        )
+
+            response = app.test_client().post(
+                "/",
+                data={"image": (image_data, "man.jpg")},
+                content_type="multipart/form-data",
+            )
+
         assert response.status_code == 200
 
-    def test_gallery_route(self):
+    @patch('app.MongoClient')
+    def test_gallery_route(self, mock_client):
         """
         Test the GET request to the gallery page.
         """
+        mock_db = MagicMock()
+        mock_client.return_value = mock_db
+        mock_collection = MagicMock()
+        mock_db.get_database.return_value.__getitem__.return_value = mock_collection
+        mock_collection.find.return_value = [
+            {"_id": "1", "image_ref": "../img/man.jpg", "processed": True, "emotion": "happy"},
+        ]
+
         response = app.test_client().get("/gallery")
+        
         assert response.status_code == 200
+        assert b"../img/man.jpg" in response.data
 
     def test_check_status(self):
         """
