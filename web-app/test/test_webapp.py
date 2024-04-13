@@ -1,3 +1,6 @@
+"""
+TEST
+"""
 import os
 from unittest.mock import patch, MagicMock
 import tempfile
@@ -11,6 +14,7 @@ mock_collection = MagicMock()
 def test_app_client():
     """Fixture to provide a test client for the Flask application."""
     app.config['TESTING'] = True
+    app.config['UPLOAD_FOLDER'] = tempfile.gettempdir()  # Set upload folder to temporary directory
     with app.test_client() as client:
         yield client
 
@@ -76,10 +80,9 @@ class Tests:
             )
 
             # Check file storage
-            assert os.path.exists(f"static/uploads/{tmp.name.split('/')[-1]}")
+            assert os.path.exists(f"{app.config['UPLOAD_FOLDER']}/{tmp.name.split('/')[-1]}")
 
             # Check database insertion
             assert response.status_code == 200
             assert b"Image uploaded successfully" in response.data
-
 
