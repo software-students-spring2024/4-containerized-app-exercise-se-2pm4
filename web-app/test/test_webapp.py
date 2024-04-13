@@ -47,7 +47,7 @@ class Tests:
         Test does the app respond to a given image.
         """
         test_img_path = (
-            "web-app\img\man.jpg"
+            "../img/man.jpg"
         )
         with open(test_img_path, "rb") as image_file:
             image_data = image_file.read()
