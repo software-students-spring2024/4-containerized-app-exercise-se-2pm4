@@ -13,11 +13,11 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd machine-learning-client
           python -m pip install --upgrade pip
           python -m pip install pipenv
-          cd machine-learning-client
-          pipenv sync --dev
-          pipenv shell
+          pipenv sync --dev --python $(which python)
+          pipenv shell --fancy --python $(which python)
 
       - name: Test with pytest
         run: |
