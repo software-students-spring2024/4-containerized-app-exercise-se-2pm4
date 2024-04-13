@@ -1,78 +1,69 @@
-"""
-Module for testing Web-app functionalities.
-"""
+"""TEST"""
 
 import os
+from unittest.mock import MagicMock
 import pytest
-from flask import Flask
-from pymongo import MongoClient
-from bson.objectid import ObjectId
-from unittest.mock import patch, MagicMock
+from app import app
 
-app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "static/uploads"
+# Mocking the database collection
+mock_collection = MagicMock()
 
-# Initialize MongoDB client and collection
-client = MongoClient("mongodb://localhost:27017/")
-db = client.get_database("image_emotion_db")
-images_collection = db["images"]
-
-class TestWebapp:
+@pytest.fixture
+def test_app_client():
     """
-    Test class for Web-app functionalities.
+    Create and configure a test client for the app.
     """
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        yield client
 
-    @pytest.fixture
-    def test_home_get(self):
-        """
-        Test the GET request to the home page.
-        """
-        response = app.test_client().get("/")
-        assert response.status_code == 200
+def test_home_post(test_app_client2, monkeypatch):
+    """
+    Test the POST request to the home page with a sample image.
+    """
+    # Mock environment variables
+    monkeypatch.setenv("FLASK_RUN_PORT", "5000")
+    monkeypatch.setenv("DB_HOST", "localhost")
+    monkeypatch.setenv("MONGO_PORT", "27017")
+    monkeypatch.setenv("MONGO_DB", "test_db")
 
-    def test_home_post(self):
-        """
-        Test the POST request to the home page with a sample image.
-        """
-        test_img_path = os.path.join(os.path.dirname(__file__), "../img/man.jpg")
-        with open(test_img_path, "rb") as image_file:
-            image_data = image_file.read()
+    # Mocking insert_one method
+    mock_collection.insert_one.return_value.inserted_id = "some_object_id"
 
-            response = app.test_client().post(
-                "/",
-                data={"image": (image_data, "man.jpg")},
-                content_type="multipart/form-data",
-            )
+    # Read test image data
+    test_img_path = os.path.join(os.path.dirname(__file__), "../img/man.jpg")
+    with open(test_img_path, "rb") as image_file:
+        image_data = image_file.read()
 
-        assert response.status_code == 200
+    # Send POST request with test image
+    response = test_app_client2.post(
+        "/",
+        data={"image": (image_data, "man.jpg")},
+        content_type="multipart/form-data",
+    )
 
-    @patch('app.MongoClient')
-    def test_gallery_route(self, mock_client):
-        """
-        Test the GET request to the gallery page.
-        """
-        mock_db = MagicMock()
-        mock_client.return_value = mock_db
-        mock_collection = MagicMock()
-        mock_db.get_database.return_value.__getitem__.return_value = mock_collection
-        mock_collection.find.return_value = [
-            {"_id": "1", "image_ref": "../img/man.jpg", "processed": True, "emotion": "happy"},
-        ]
+    # Check response
+    assert response.status_code == 200
+    assert b"Image uploaded successfully" in response.data
 
-        response = app.test_client().get("/gallery")
-        
-        assert response.status_code == 200
-        assert b"../img/man.jpg" in response.data
+def test_gallery_route(test_app_client1, monkeypatch):
+    """
+    Test the GET request to the gallery page.
+    """
+    # Mock environment variables
+    monkeypatch.setenv("FLASK_RUN_PORT", "5000")
+    monkeypatch.setenv("DB_HOST", "localhost")
+    monkeypatch.setenv("MONGO_PORT", "27017")
+    monkeypatch.setenv("MONGO_DB", "test_db")
 
-    def test_check_status(self):
-        """
-        Test the whether image id are generated correctly.
-        """
-        sample_id = "sample_id"
-        images_collection.insert_one(
-            {"_id": sample_id, "processed": False, "emotion": "happy"}
-        )
-        response = images_collection.find_one({"_id": ObjectId(sample_id)})
-        assert response["_id"] == sample_id
-        images_collection.delete_many({})
+    # Mocking find method
+    mock_collection.find.return_value = [
+        {"_id": "some_object_id", "processed": False, "emotion": "loading..."}
+    ]
 
+    # Send GET request to gallery
+    response = test_app_client1.get("/gallery")
+
+    # Check response
+    assert response.status_code == 200
+    assert b"loading..." in response.data
