@@ -11,6 +11,7 @@ pymongo = "*"
 pytest = "*"
 tomli = "*"
 typing-extensions = "*"
+dill = "*"
 
 [dev-packages]
 
