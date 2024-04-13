@@ -3,6 +3,7 @@
 import os
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
+import pymongo
 from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -55,8 +56,11 @@ def home():
 @app.route("/gallery")
 def gallery():
     """function for loading gallery"""
-    images = images_collection.find()
-    return render_template("gallery.html", images=images)
+    try:
+        images = images_collection.find()
+        return render_template("gallery.html", images=images)
+    except pymongo.errors.ServerSelectionTimeoutError:
+        return render_template("gallery.html", image=[])
 
 
 @app.route("/status/<object_id>")
