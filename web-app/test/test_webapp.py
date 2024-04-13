@@ -1,17 +1,21 @@
 """
 TEST
 """
-import os
 from unittest.mock import patch, MagicMock
 import tempfile
 from app import app
 import pytest
 
 # Mocking the database collection
+# pylint: disable=W0621
+# pylint: disable=W0613
 mock_collection = MagicMock()
 
 @pytest.fixture(scope='module')
 def test_client():
+    """
+    test client
+    """
     flask_app = app
     testing_client = flask_app.test_client()
     ctx = flask_app.app_context()
