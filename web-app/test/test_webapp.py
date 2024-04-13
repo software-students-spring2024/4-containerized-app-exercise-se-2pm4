@@ -3,6 +3,7 @@ Module for testing DeepFace functionalities.
 """
 
 import pytest
+import os
 from flask import Flask
 from pymongo import MongoClient
 from bson.objectid import ObjectId
