@@ -3,10 +3,24 @@
 from unittest.mock import patch, MagicMock
 from io import BytesIO
 from app import app
+import pytest
 
 
 # Mocking the database collection
 mock_collection = MagicMock()
+
+@pytest.fixture
+def test_app_client():
+    """Fixture to provide a test client for the Flask application."""
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        yield client
+
+@pytest.fixture
+def monkey_db():
+    """Fixture to mock the MongoDB collection."""
+    with patch('app.images_collection', mock_collection):
+        yield mock_collection
 
 class Tests:
     '''
