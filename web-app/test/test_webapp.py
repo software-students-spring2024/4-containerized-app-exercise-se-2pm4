@@ -3,6 +3,9 @@
 from app import app
 
 class Tests:
+    '''
+    class for testing web-app
+    '''
     def test_sanity_check(self):
         """Function sanity check."""
         expected = True
