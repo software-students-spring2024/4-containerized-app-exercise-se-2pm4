@@ -3,10 +3,8 @@ Module for testing DeepFace functionalities.
 """
 
 import os
-from datetime import datetime
-from flask import Flask, render_template, request, jsonify
+from flask import Flask
 import pytest
-from werkzeug.utils import secure_filename
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
