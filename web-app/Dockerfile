@@ -1,5 +1,12 @@
 FROM python:3.10-slim-buster
 
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-dev \
+    libglib2.0-0 \
+    pkg-config \
+    libhdf5-dev \
+    gcc
+
 # Set the working directory in the image
 WORKDIR /app
 
