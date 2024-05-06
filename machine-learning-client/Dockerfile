@@ -6,7 +6,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install\
     libgl1\
     libgl1-mesa-glx \ 
     libglib2.0-0 -y && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    pkg-config \
+    libhdf5-dev \
+    gcc
 #install curl
 RUN apt-get update && apt-get install -y curl
 # Keeps Python from generating .pyc files in the container
